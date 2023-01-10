@@ -1,0 +1,99 @@
+﻿@page "/Contacts"
+@using Phonebook.Data
+@inject ContactService contactService
+
+<NavLink class="nav-link" href="AddContact">
+    <button class="btn btn-primary">Add New Contact</button>
+</NavLink>
+
+<h1>Phonebook</h1>
+
+@if(ContactObject is null)
+{
+    <p><em>Loading...!</em></p>
+}
+else
+{
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone Number</th>
+                
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var contact in ContactObject)
+            {
+                <tr>
+                    <td class="td-title"><i class="oi oi-person"></i></td>
+                    <td class="td-title">@contact.FirstName</td>
+                    <td class="td-title">@contact.LastName</td>
+                    <td class="td-title">@contact.PhoneNumber</td>
+                    <td class="icons">
+                        <a class="edit oi oi-pencil" href="EditContact/@contact.Id">
+                            Edit
+                        </a>
+                        <a class="delete oi oi-trash" href="DeleteContact/@contact.Id">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+
+<style>
+    h1 {
+        color: cornflowerblue;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: underline;
+        margin-bottom: 2rem;
+    }
+
+    thead {
+        width: 100%;
+    }
+
+    th {
+        color: cornflowerblue;
+        text-align: center;
+    }
+
+    td {
+        border: 2px solid cornflowerblue;
+    }
+
+    .td-title {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .oi-person {
+        color: cornflowerblue;
+    }
+
+    .icons {
+        text-align: center;
+    }
+    .edit, .delete {
+        text-decoration: none;
+    }
+
+</style>
+
+@code {
+    List<Contact> ContactObject;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ContactObject = await Task.Run(() => contactService.GetAllContactsAsync());
+    }
+}

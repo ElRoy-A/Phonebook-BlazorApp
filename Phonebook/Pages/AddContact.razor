@@ -1,0 +1,52 @@
+﻿@page "/AddContact"
+@using Phonebook.Data
+@inject ContactService contactService
+@inject NavigationManager NavigationManager
+
+<h1>Add Contact</h1>
+
+<form>
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="FirstName" class="control-label">First Name</label>
+                <input form="First Name" class="form-control" @bind="contactObject.FirstName" />
+            </div>
+            <div class="form-group">
+                <label for="LastName" class="control-label">Last Name</label>
+                <input form="Last Name" class="form-control" @bind="contactObject.LastName" />
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber" class="control-label">Phone Number</label>
+                <input form="Phone Number" class="form-control" @bind=contactObject.PhoneNumber />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateContact" value="Save"/>
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    Contact contactObject = new Contact();
+
+    protected async void CreateContact()
+    {
+        await contactService.CreateContactAsync(contactObject);
+        NavigationManager.NavigateTo("Contacts");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Contacts");
+    }
+}
